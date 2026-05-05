@@ -1,0 +1,59 @@
+Historia
+--------
+This is a small generic sequence container with which to keep track of a list of elements, that
+supports bi-directional traversal with access only to the previous, current, next, and first/last elements, where
+insertion results in deletion of all tail element(s). Another way to think of it, is a train wherein a person 
+inside a freight car may disconnect any freight cars behind the one they are currently in, or add one to the end. Also, if attempting to 
+add an element, if the data is identical to the current element, nothing will be added. Use cases for this are, for 
+example, to keep a history of a browser's pages using its forward/backward buttons.
+
+   OO O o o o...      ______________________ _________________ ___________________
+  O     ____          |                    | |       o         | |               |
+ ][_n_i_| (   ooo___  |                    | |      /|\        | |               |
+(__________|_[______]_|____________________|_|______/\_________|_|_______________|
+0--0--0      0  0      0       0     0        0        0
+
+What this IS:
+
+* An idiomatic wrapper around a deque
+* A generic templated container
+* A header-only library
+* Insular, and should never throw exceptions or have error states unless from the standard library methods
+
+This is NOT:
+
+* A perfomant implementation
+* A featureful library. This solves a very specific use-case
+ 
+ 
+ 
+==== Example
+[source,ruby]
+----
+Historia<std::string> historia; //Create our class object
+historia.push("Test string"); //Push data into our object
+std::cout << historia.current(); //Will return and print our current string "Test String"
+----
+
+
+==== CMake integration
+To use this library you may simply download it and include it your project, or download it via your package manager. To use it with CMake, you may use the example code below...
+[source,cmake]
+----
+
+----
+ 
+
+==== Methods
+[width="190%",cols="4,3,3,3"]
+|=========================================================
+|Return value |Method name | Parameters | Throws exception
+|void |push() | T data | No
+|std::optional<T> | current() | None | Yes
+|T | next() | None | No
+|T | previous() | None | No
+|std::optional<T> | first() | None | Yes
+|std::optional<T> | last() | None | Yes
+|constexpr const auto | max_size() | None | No
+|auto | size() | None | No
+|=========================================================
