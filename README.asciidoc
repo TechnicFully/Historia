@@ -40,7 +40,9 @@ std::cout << historia.current(); //Will return and print our current string "Tes
 To use this library you may simply download it and include it your project, or download it via your package manager. To use it with CMake, you may use the example code below...
 [source,cmake]
 ----
-
+if (NOT EXISTS historia.hpp)
+	  file(DOWNLOAD https://raw.githubusercontent.com/technicfully/historia/master/historia.hpp historia.hpp)
+endif()
 ----
  
 
