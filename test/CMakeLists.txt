@@ -28,6 +28,11 @@ FetchContent_MakeAvailable(plog)
 
 enable_testing()
 
+
+add_executable(historiaspeedtest historia_speedtest.cpp)
+target_compile_options(historiaspeedtest PRIVATE -Wall -W)
+set_target_properties(historiaspeedtest PROPERTIES CXX_STANDARD 17)
+
 add_executable(historiatest historia_test.cpp)
 target_link_libraries(historiatest GTest::gtest_main plog::plog)
 target_compile_options(historiatest PRIVATE -Wall -W)

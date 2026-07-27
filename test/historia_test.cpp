@@ -1,4 +1,4 @@
-#include "historia.hpp"
+#include "../historia.hpp"
 
 #include <exception>
 #include <string>
@@ -97,7 +97,7 @@ TEST(push, noDuplicateValues) {
     Historia.push(0);
     Historia.push(0);
     Historia.push(1);
-    ASSERT_EQ(Historia.current(), 1);
+    ASSERT_EQ(Historia.size(), 2);
 }
 
 TEST(push, pushThreeValuesAndReturnsCorrectMiddleValue) {
