@@ -15,7 +15,6 @@
 #include <optional>
 #include <cstdint>
 
-
 #ifdef HISTORIA_DEBUG
 #include <plog/Log.h>
 #else
@@ -50,6 +49,11 @@ class Historia
                     pages.push_back(data);
                     page_index = 0;
                 } else {
+                    if (page_index + 1 < pages.size()) {
+                        pages.erase(pages.begin() + page_index + 1, pages.end());
+                        page_index = pages.size() - 1;
+                    }
+
                     pages.push_back(data);
                     increment_index();
                 }
