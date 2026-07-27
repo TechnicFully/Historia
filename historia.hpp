@@ -9,18 +9,17 @@
 
 
 
-
+#include <cstdint>
 #include <deque>
 #include <limits>
 #include <optional>
-#include <cstdint>
 
 #ifdef HISTORIA_DEBUG
 #include <plog/Log.h>
 #else
 struct black_hole_t
 {
-    template <typename T> black_hole_t operator<<(T &&)
+    template <typename T> black_hole_t operator<<(T&&)
     {
         return {};
     }
@@ -44,7 +43,7 @@ class Historia
             static_assert(std::is_arithmetic<I>::value, "Not an arithmetic type");
             static_assert(std::numeric_limits<I>::min() >= 0, "Arithmetic type should have a minimum value of 0 (zero)");
 
-            void push(T data) {
+            void push(T const data) {
                 if (pages.empty()) {
                     pages.push_back(data);
                     page_index = 0;
@@ -86,7 +85,7 @@ class Historia
         //██║     ██║   ██║██║╚██╗██║╚════██║   ██║   ██╔══██╗██║   ██║██║        ██║   ██║   ██║██╔══██╗╚════██║
         //╚██████╗╚██████╔╝██║ ╚████║███████║   ██║   ██║  ██║╚██████╔╝╚██████╗   ██║   ╚██████╔╝██║  ██║███████║
         // ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝  ╚═════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚══════╝
-        Historia(T const& data) {
+        Historia(T const data) {
             push(data);
         }
 
@@ -123,7 +122,7 @@ class Historia
 
         std::optional<T> current() {
             if (history_stack.pages.empty()) {
-                return {};
+                return std::nullopt;
             }
 
             return std::make_optional<T>(history_stack.pages.at(history_stack.page_index));
@@ -131,7 +130,7 @@ class Historia
 
         std::optional<T> first() {
           if (history_stack.pages.empty()) {
-                return {};
+                return std::nullopt;
             }
 
             return std::make_optional<T>(history_stack.pages.front());
@@ -139,7 +138,7 @@ class Historia
 
         std::optional<T> last() {
             if (history_stack.pages.empty()) {
-                return {};
+                return std::nullopt;
             }
 
             return std::make_optional<T>(history_stack.pages.back());
@@ -152,7 +151,7 @@ class Historia
         //██║╚██╔╝██║██║   ██║██║  ██║██║██╔══╝  ██║██╔══╝  ██╔══██╗╚════██║
         //██║ ╚═╝ ██║╚██████╔╝██████╔╝██║██║     ██║███████╗██║  ██║███████║
         //╚═╝     ╚═╝ ╚═════╝ ╚═════╝ ╚═╝╚═╝     ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝
-        void push(T data) {
+        void push(T const data) {
             //Check for duplicate data
             if (!history_stack.pages.empty()) {
                 if (history_stack.pages.at(history_stack.page_index) == data) {
