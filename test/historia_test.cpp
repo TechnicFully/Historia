@@ -1,7 +1,10 @@
 #include "../historia.hpp"
 
+#include <chrono>
 #include <exception>
+#include <random>
 #include <string>
+#include <thread>
 
 #include <gtest/gtest.h>
 
@@ -111,7 +114,7 @@ TEST(push, pushThreeValuesAndReturnsCorrectMiddleValue) {
 
 TEST(push, testLimit) {
     Historia<int> Historia;
-    for (size_t i = 0; i != Historia.max_size(); i++) { 
+    for (int i = 0; i < Historia.max_size(); i++) { 
         Historia.push(i);
     }
 
@@ -170,16 +173,35 @@ TEST(constructor, constructDifferentTypes) {
 }
 
 
+TEST(randomMethods, randomizedFunctionCalls) {
+    Historia<int> history;
+    
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> distrib(0, 7); // 8 methods
+
+    for (int i = 0; i < 10000; i++) {
+        int choice = distrib(gen);
+
+        switch (choice) {
+            case 0: std::cout << "Calling push" << std::endl; history.push(0);  break;
+            case 1: std::cout << "Calling current" << std::endl; history.current(); break;
+            case 2: std::cout << "Calling last" << std::endl; history.last(); break;
+            case 3: std::cout << "Calling max_size" << std::endl; history.max_size(); break;
+            case 4: std::cout << "Calling next " << std::endl; history.next(); break;
+            case 5: std::cout << "Calling previous" << std::endl; history.previous(); break;
+            case 6: std::cout << "Calling size" << std::endl; history.size(); break;
+       }
+    }
+}
+
+
 /****************/
 /***** MAIN *****/
 /****************/
 int main(int argc, char** argv) {
     (void)argc; //Silence unused parameter warning
     (void)argv; //Silence unused parameter warning
-    try {
-        ::testing::InitGoogleTest();
-        return RUN_ALL_TESTS();
-    } catch(const std::exception& e) {
-        PLOG_ERROR << "Unhandled exception caught: " << e.what();
-    }
+    ::testing::InitGoogleTest();
+    return RUN_ALL_TESTS();
 }

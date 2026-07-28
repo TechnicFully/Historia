@@ -40,7 +40,7 @@ int main()
             return sum + d.count();
     });
 
-    auto avg_us = std::chrono::microseconds(total_us / test_results_times.size());
+    auto avg_us = std::chrono::microseconds(static_cast<size_t>(total_us) / test_results_times.size());
 
     
     std::cout << "Average run time: " << avg_us.count() << " microseconds\n" << std::endl;

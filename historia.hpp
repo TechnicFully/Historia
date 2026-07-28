@@ -48,9 +48,9 @@ class Historia
                     pages.push_back(data);
                     page_index = 0;
                 } else {
-                    if (page_index + 1 < pages.size()) {
+                    if (page_index + 1 < static_cast<I>(pages.size())) {
                         pages.erase(pages.begin() + page_index + 1, pages.end());
-                        page_index = pages.size() - 1;
+                        page_index = static_cast<I>(pages.size() - 1);
                     }
 
                     pages.push_back(data);
@@ -60,18 +60,22 @@ class Historia
 
             void increment_index() {
                 if (page_index > pages.size()) {
-                    page_index = pages.size();
+                    page_index = static_cast<I>(pages.size());
                 } else {
                     page_index++;
                 }
             }
 
             I size() {
-                return pages.size() - 1; //Account for alignment. A pages size of 1 will have an index of 0
+                return static_cast<I>(pages.size() - 1); //Account for alignment. A pages size of 1 will have an index of 0
             }
 
             I max_size() {
                 return std::numeric_limits<I>::max();
+            }
+
+            bool empty() {
+                return pages.empty();
             }
         };
 
@@ -98,7 +102,11 @@ class Historia
         //██╔══██║██║     ██║     ██╔══╝  ╚════██║╚════██║
         //██║  ██║╚██████╗╚██████╗███████╗███████║███████║
         //╚═╝  ╚═╝ ╚═════╝ ╚═════╝╚══════╝╚══════╝╚══════╝
-        T next() {
+        std::optional<T> next() {
+            if (history_stack.empty()) {
+                return std::nullopt;
+            }
+            
             if (history_stack.page_index < history_stack.size()) {
                 PLOG_VERBOSE << "Accessing next element " << history_stack.page_index << " " << history_stack.pages.size();
                 history_stack.increment_index();
@@ -109,7 +117,11 @@ class Historia
             return history_stack.pages.at(history_stack.page_index);
         }
 
-        T previous() {
+        std::optional<T> previous() {
+            if (history_stack.empty()) {
+                return std::nullopt; 
+            }
+
             if (history_stack.page_index > 0) {
                 PLOG_DEBUG << "Accessing previous element";
                 history_stack.page_index--;
@@ -125,7 +137,7 @@ class Historia
                 return std::nullopt;
             }
 
-            return std::make_optional<T>(history_stack.pages.at(history_stack.page_index));
+            return history_stack.pages.at(history_stack.page_index);
         }
 
         std::optional<T> first() {
@@ -133,7 +145,7 @@ class Historia
                 return std::nullopt;
             }
 
-            return std::make_optional<T>(history_stack.pages.front());
+            return history_stack.pages.front();
         }
 
         std::optional<T> last() {
@@ -141,7 +153,7 @@ class Historia
                 return std::nullopt;
             }
 
-            return std::make_optional<T>(history_stack.pages.back());
+            return history_stack.pages.back();
         }
 
 
@@ -171,7 +183,7 @@ class Historia
         //██║     ██╔══██║██╔═══╝ ██╔══██║██║     ██║   ██║     ╚██╔╝  
         //╚██████╗██║  ██║██║     ██║  ██║╚██████╗██║   ██║      ██║   
         // ╚═════╝╚═╝  ╚═╝╚═╝     ╚═╝  ╚═╝ ╚═════╝╚═╝   ╚═╝      ╚═╝   
-        constexpr const auto max_size() noexcept {
+        constexpr auto max_size() noexcept {
             return history_stack.max_size();
         }
 
