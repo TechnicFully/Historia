@@ -79,7 +79,7 @@ class Historia
             }
         };
 
-        History_stack<uint16_t> history_stack; //Max of 65536 values
+        History_stack<uint8_t> history_stack; //Max of 256 values
 
 
     public:
@@ -133,7 +133,7 @@ class Historia
         }
 
         std::optional<T> current() {
-            if (history_stack.pages.empty()) {
+            if (history_stack.empty()) {
                 return std::nullopt;
             }
 
@@ -141,7 +141,7 @@ class Historia
         }
 
         std::optional<T> first() {
-          if (history_stack.pages.empty()) {
+          if (history_stack.empty()) {
                 return std::nullopt;
             }
 
@@ -149,7 +149,7 @@ class Historia
         }
 
         std::optional<T> last() {
-            if (history_stack.pages.empty()) {
+            if (history_stack.empty()) {
                 return std::nullopt;
             }
 
@@ -165,7 +165,7 @@ class Historia
         //╚═╝     ╚═╝ ╚═════╝ ╚═════╝ ╚═╝╚═╝     ╚═╝╚══════╝╚═╝  ╚═╝╚══════╝
         void push(T const data) {
             //Check for duplicate data
-            if (!history_stack.pages.empty()) {
+            if (!history_stack.empty()) {
                 if (history_stack.pages.at(history_stack.page_index) == data) {
                     PLOG_DEBUG << "Trying to insert duplicate data. Returning...";
                     return;
