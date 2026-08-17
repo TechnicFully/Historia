@@ -1,4 +1,4 @@
-cmake_minimum_required(3.10)
+cmake_minimum_required(3.5)
 project(Historia LANGUAGES CXX)
 
 add_library(historia STATIC historia.hpp)
