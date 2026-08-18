@@ -1,4 +1,4 @@
-#include "../historia.hpp"
+#include "historia.hpp"
 
 #include <chrono>
 #include <exception>
