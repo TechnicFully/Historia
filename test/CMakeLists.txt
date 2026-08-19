@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.10)
 cmake_policy(SET CMP0135 NEW)
 project(HistoriaTest)
 
-# GoogleTest requires at least C++14
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -38,18 +37,21 @@ FetchContent_MakeAvailable(historia)
 enable_testing()
 
 
+### Speedtest executable ###
 add_executable(historiaspeedtest historia_speedtest.cpp)
 set_target_properties(historiaspeedtest PROPERTIES CXX_STANDARD 17)
-target_link_libraries(historiaspeedtest Historia::historia)
+target_link_libraries(historiaspeedtest PRIVATE Historia::historia)
 if (MSVC)
 	target_compile_options(historiaspeedtest PRIVATE -Wall /W4 /WX /permissive-)
 else()
 	target_compile_options(historiaspeedtest PRIVATE -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion -Werror)
 endif()
 
+
+### Test executable ###
 add_executable(historiatest historia_test.cpp)
-target_link_libraries(historiatest GTest::gtest_main plog::plog Historia::historia)
 set_target_properties(historiatest PROPERTIES CXX_STANDARD 17)
+target_link_libraries(historiatest PRIVATE GTest::gtest_main plog::plog Historia::historia)
 if (MSVC)
 	target_compile_options(historiatest PRIVATE -Wall /W4 /WX /permissive-)
 else()
