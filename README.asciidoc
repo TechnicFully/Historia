@@ -37,7 +37,24 @@ std::cout << historia.current(); //Will return and print our current string "Tes
 
 
 ==== CMake integration
-To use this library you may simply download it and include it your project, or download it via your package manager. To use it with CMake, you may use the example code below...
+To use this library you may simply download it and include it your project, or download it via your package manager. To use it with CMake, you may use the example(s) below...
+[source,cmake]
+----
+include(FetchContent)
+
+FetchContent_Declare(
+    historia
+    GIT_REPOSITORY https://github.com/TechnicFully/Historia
+    GIT_TAG        main
+    GIT_SHALLOW    true
+)
+FetchContent_MakeAvailable(historia)
+
+target_link_libraries(your_target PRIVATE Historia::historia) # Replace your_target with your CMake target
+----
+
+If you would rather directly download the file without using FetchContent, you can simply use this
+
 [source,cmake]
 ----
 if (NOT EXISTS historia.hpp)
@@ -52,10 +69,16 @@ endif()
 |Return value |Method name | Parameters | Throws exception
 |void |push() | T data | No
 |std::optional<T> | current() | None | Yes
-|T | next() | None | No
-|T | previous() | None | No
+|std::optional<T> | next() | None | No
+|std::optional<T> | previous() | None | No
 |std::optional<T> | first() | None | Yes
 |std::optional<T> | last() | None | Yes
-|constexpr const auto | max_size() | None | No
+|constexpr auto | max_size() | None | No
 |auto | size() | None | No
 |=========================================================
+
+The primary function is _push()_. This is used to add data, or 'pages'. _next()_ and _previous()_ are to access each item without modifying the list, and will be the secondarily most used functions. _first()_ and _last()_ are to access the head and tail elements respectively if needed. _size()_ returns the number of elements currently in the list, and _max_size()_ returns the maximum number of elements, which by default is a 8 bit value (256 possible values). This can by changed by editing _History_stack<uint8_t> history_stack;_ in history.hpp to a different variable type if needed. In the event that data is _push()_'d when at capacity, the head element will be removed.
+
+current(), next(), previous(), first(), and last() all return the accessed item if available, otherwise they will return std::nullopt.
+
+
